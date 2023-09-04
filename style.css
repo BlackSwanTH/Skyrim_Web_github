@@ -1,0 +1,171 @@
+body {
+  background-image: url(background/background1.gif);
+  background-size: 100%;
+  height: 100%;
+  width: 100%;
+  background-repeat: repeat-y;
+  background-attachment: fixed;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.sidenav {
+  height: 100%;
+  width: 20%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+/* Style the sidenav links and the dropdown button */
+.sidenav a,
+.sidenav button,
+.dropdown-btn {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 20px;
+  color: #818181;
+  display: block;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  outline: none;
+}
+
+/* On mouse-over */
+.sidenav button:hover,
+.dropdown-btn:hover {
+  color: #f1f1f1;
+}
+
+/* Main content */
+.main {
+  margin-left: 200px;
+  /* Same as the width of the sidenav */
+  font-size: 20px;
+  /* Increased text to enable scrolling */
+  padding: 0px 10px;
+}
+
+/* Add an active class to the active dropdown button */
+.active {
+  background-color: green;
+  color: white;
+}
+
+/* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
+.dropdown-container {
+  display: none;
+  background-color: #262626;
+  padding-left: 8px;
+}
+
+/* Optional: Style the caret down icon */
+.fa-caret-down {
+  float: right;
+  padding-right: 8px;
+}
+
+/* Some media queries for responsiveness */
+@media screen and (max-height: 450px) {
+  .sidenav {
+    padding-top: 15px;
+  }
+
+  .sidenav a {
+    font-size: 18px;
+  }
+}
+
+.filterDiv {
+  float: left;
+  background-color: #bfbfbf;
+  width: 375px;
+  line-height: 100px;
+  text-align: center;
+  border-radius: 8px;
+  margin: 2px;
+  display: none;
+}
+
+.show {
+  display: block;
+}
+
+.container {
+  margin-top: 20px;
+  overflow: hidden;
+}
+
+.try {
+  width: 20%;
+  float: left;
+  margin: 10px;
+  height: 280px;
+  border-radius: 8px;
+  background-color: #818181;
+  color: white;
+  overflow: hidden;
+}
+
+.content-in-try {
+  display: flex;
+  overflow: hidden;
+}
+
+.box {
+  width: 100%;
+  background-color: rgb(57, 58, 59);
+  height: 200px;
+}
+
+.inside-box {
+  margin: 10px;
+  text-align: center;
+  padding: 10px;
+  color: white;
+}
+
+.image_background {
+  height: 70px;
+  width: 70px;
+  background-color: azure;
+  margin: 10px;
+  border-radius: 8px;
+  text-align: center;
+}
+.image_icons{
+  height: 20px;
+  width: 20px;
+  margin: 10px;
+}
+img {
+  height: 60px;
+  width: 60px;
+}
+
+#mySearch{
+  padding: 10px;
+  margin: 10px;
+  margin-left: 40px;
+  border-radius: 8px;
+}
+
+.Big_text{
+  font-size: larger;
+}
+
+.sidebox{
+  float: right;
+  height: 300px;
+  background-color: #262626;
+  color: white;
+  width: 50px;
+  text-align: center;
+  position: absolute;
+}

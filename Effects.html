@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alchemy For Skyrim</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidenav" style="display:none" id="mySidebar">
+        <button onclick="w3_close()">Close &times;</button>
+        <button class="dropdown-btn" onclick="showEffects()">Potion Effects
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-container" id="btn-container">
+            <button class="btn active" onclick="filterSelection('all')">Show All Effects</button>
+            <button class="btn" onclick="filterSelection('damage')">Damage Effects</button>
+            <button class="btn" onclick="filterSelection('restore')">Restore Effects</button>
+            <button class="btn" onclick="filterSelection('weaken')">Weaken Effects</button>
+            <button class="btn" onclick="filterSelection('fortify')">Fortify Effects</button>
+            <button class="btn" onclick="filterSelection('resist')">Resist Effects</button>
+            <button class="btn" onclick="filterSelection('misc')">Misc Effects</button>
+        </div>
+        <button class="w3-bar-item w3-button" style="color: white;" onclick="showIngredients()">Potion
+            Ingredients</button>
+        <button class="w3-bar-item w3-button" style="color: white;">Potion Builder</button>
+    </div>
+
+    <!-- Header -->
+    <div class="w3-red">
+        <button class="w3-button w3-red w3-xlarge" onclick="w3_open()">☰</button>
+        <!-- UI ติดไว้ก่อน!! -->
+
+        <div class="w3-container" style="display: flex; margin-right: 10px;">
+            <h1>Alchemy For Skyrim</h1>
+            <input type="text" placeholder="Search.." id="mySearch" onkeyup="search()">
+        </div>
+    </div>
+
+    <div class="sidebox">
+        <img src="icons/filter2.png" alt="" class="image_icons" style="cursor: pointer;" onclick="">
+    </div>
+
+    <!-- Effects Contents -->
+    <div id="effect_container" style="display: none;">
+        <div class="filterDiv misc">CURE DISEASE</div>
+        <div class="filterDiv damage">DAMAGE HEALTH</div>
+        <div class="filterDiv damage">DAMAGE MAGICKA</div>
+        <div class="filterDiv damage">DAMAGE MAGICKA REGEN</div>
+        <div class="filterDiv damage">DAMAGE STAMINA</div>
+        <div class="filterDiv damage">DAMAGE STAMINA REGEN</div>
+        <div class="filterDiv misc">FEAR</div>
+        <div class="filterDiv fortify">FORTIFY ALTERATION</div>
+        <div class="filterDiv fortify">FORTIFY BARTER</div>
+        <div class="filterDiv fortify">FORTIFY BLOCK</div>
+        <div class="filterDiv fortify">FORTIFY CARRY WEIGHT</div>
+        <div class="filterDiv fortify">FORTIFY CONJURATION</div>
+        <div class="filterDiv fortify">FORTIFY DESTRUCTION</div>
+        <div class="filterDiv fortify">FORTIFY ENCHANTING</div>
+        <div class="filterDiv fortify">FORTIFY HEALTH</div>
+        <div class="filterDiv fortify">FORTIFY HEAVY ARMOR</div>
+        <div class="filterDiv fortify">FORTIFY ILLUSION</div>
+        <div class="filterDiv fortify">FORTIFY LIGHT ARMOR</div>
+        <div class="filterDiv fortify">FORTIFY LOCKPICKING</div>
+        <div class="filterDiv fortify">FORTIFY MAGICKA</div>
+        <div class="filterDiv fortify">FORTIFY MARKSMAN</div>
+        <div class="filterDiv fortify">FORTIFY ONE-HANDED</div>
+        <div class="filterDiv fortify">FORTIFY PICKPOCKET</div>
+        <div class="filterDiv fortify">FORTIFY RESTORATION</div>
+        <div class="filterDiv fortify">FORTIFY SMITHING</div>
+        <div class="filterDiv fortify">FORTIFY STAMINA</div>
+        <div class="filterDiv fortify">FORTIFY SNEAK</div>
+        <div class="filterDiv fortify">FORTIFY TWO-HANDED</div>
+        <div class="filterDiv misc">FRENZY</div>
+        <div class="filterDiv misc">INVISIBILITY</div>
+        <div class="filterDiv damage">LINGERING DAMAGE HEALTH</div>
+        <div class="filterDiv damage">LINGERING DAMAGE MAGICKA</div>
+        <div class="filterDiv damage">LINGERING DAMAGE STAMINA</div>
+        <div class="filterDiv misc">PARALYSIS</div>
+        <div class="filterDiv damage">RAVAGE HEALTH</div>
+        <div class="filterDiv damage">RAVAGE MAGICKA</div>
+        <div class="filterDiv damage">RAVAGE STAMINA</div>
+        <div class="filterDiv restore">REGENERATE HEALTH</div>
+        <div class="filterDiv restore">REGENERATE MAGICKA</div>
+        <div class="filterDiv restore">REGENERATE STAMINA</div>
+        <div class="filterDiv resist">RESIST FIRE</div>
+        <div class="filterDiv resist">RESIST FROST</div>
+        <div class="filterDiv resist">RESIST MAGIC</div>
+        <div class="filterDiv resist">RESIST POISON</div>
+        <div class="filterDiv resist">RESIST SHOCK</div>
+        <div class="filterDiv restore">RESTORE HEALTH</div>
+        <div class="filterDiv restore">RESTORE MAGICKA</div>
+        <div class="filterDiv restore">RESTORE STAMINA</div>
+        <div class="filterDiv misc">SLOW</div>
+        <div class="filterDiv misc">WATER BREATHING</div>
+        <div class="filterDiv weaken">WEAKNESS TO FIRE</div>
+        <div class="filterDiv weaken">WEAKNESS TO FROST</div>
+        <div class="filterDiv weaken">WEAKNESS TO MAGIC</div>
+        <div class="filterDiv weaken">WEAKNESS TO POISON</div>
+        <div class="filterDiv weaken">WEAKNESS TO SHOCK</div>
+    </div>
+    <!-- Ingredients Contents -->
+    <!-- <div id="ingredient_container" style="display: none;">
+
+    </div> -->
+
+    </div>
+    <script>
+        function search() {
+            let input = document.getElementById('mySearch');
+            let filter = input.value.toLowerCase();
+            let div = document.getElementsByClassName('try');
+            for (let i = 0; i < Object.keys(ingredientsDict).length; i++) {
+                let p = document.getElementById(Object.keys(ingredientsDict)[i]);
+                if (p.innerHTML.toLowerCase().indexOf(filter) > -1) {
+                    div[i].style.display = "";
+                }
+                else {
+                    div[i].style.display = "none";
+                }
+            }
+        }
+        function w3_open() {
+            document.getElementById("mySidebar").style.display = "block";
+        }
+
+        function w3_close() {
+            document.getElementById("mySidebar").style.display = "none";
+        }
+
+        // dropdown from side-bar
+        var dropdown = document.getElementsByClassName("dropdown-btn");
+        var i;
+        for (i = 0; i < dropdown.length; i++) {
+            dropdown[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var dropdownContent = this.nextElementSibling;
+                if (dropdownContent.style.display === "block") {
+                    dropdownContent.style.display = "none";
+                }
+                else {
+                    dropdownContent.style.display = "block";
+                }
+            }
+            );
+        }
+
+        //filtering functions
+        filterSelection("all")
+        function filterSelection(c) {
+            var x, i;
+            x = document.getElementsByClassName("filterDiv");
+            if (c == "all") c = "";
+            for (i = 0; i < x.length; i++) {
+                w3RemoveClass(x[i], "show");
+                if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
+            }
+        }
+        function w3AddClass(element, name) {
+            var i, arr1, arr2;
+            arr1 = element.className.split(" ");
+            arr2 = name.split(" ");
+            for (i = 0; i < arr2.length; i++) {
+                if (arr1.indexOf(arr2[i]) == -1) { element.className += " " + arr2[i]; }
+            }
+        }
+
+        function w3RemoveClass(element, name) {
+            var i, arr1, arr2;
+            arr1 = element.className.split(" ");
+            arr2 = name.split(" ");
+            for (i = 0; i < arr2.length; i++) {
+                while (arr1.indexOf(arr2[i]) > -1) {
+                    arr1.splice(arr1.indexOf(arr2[i]), 1);
+                }
+            }
+            element.className = arr1.join(" ");
+        }
+        function showEffects() {
+            let t1 = document.getElementById('ingredient_container');
+            t1.style.display = "none";
+            let t2 = document.getElementById('effect_container');
+            t2.style.display = "block";
+        }
+        function showIngredients() {
+            let t1 = document.getElementById('effect_container');
+            t1.style.display = "none";
+            let t2 = document.getElementById('ingredient_container');
+            t2.style.display = "block";
+        }
+
+        var btnContainer = document.getElementById("btn-container");
+        var btns = btnContainer.getElementsByClassName("btn");
+        for (var i = 0; i < btns.length; i++) {
+            btns[i].addEventListener("click", function () {
+                var current = document.getElementsByClassName("active");
+                current[0].className = current[0].className.replace(" active", "");
+                this.className += " active";
+            });
+        }
+
+        // A list of ingredients
+        let ingredientsDict = {
+            "Abecean Longfin": { img: "Abecean Longfin.png", price: 15, weight: 0.5, effects: ["Weakness to Frost", "Fortify Sneak", "Weakness to Poison", "Fortify Restoration"] },
+            "Ancestor Moth Wing": { img: "Ancestor Moth Wing.png", price: 2, weight: 0.1, effects: ["Damage Stamina", "Fortify Conjuration", "Damage Magicka Regen", "Fortify Enchanting"] },
+            "Ash Creep Cluster": { img: "Ash Creep Cluster.png", price: 20, weight: 0.25, effects: ["Damage Stamina", "Invisibility", "Resist Fire", "Fortify Destruction"] },
+            "Ash Hopper Jelly": { img: "Ash Hopper Jelly.png", price: 20, weight: 0.25, effects: ["Restore Health", "Fortify Light Armor", "Resist Shock", "Weakness to Frost"] },
+            "Ashen Grass Pod": { img: "Ashen Grass Pod.png", price: 1, weight: 0.1, effects: ["Resist Fire", "Weakness to Shock", "Fortify Lockpicking", "Fortify Sneak"] },
+            "Bear Claws": { img: "Bear Claws.png", price: 2, weight: 0.1, effects: ["Restore Stamina", "Fortify Health", "Fortify One-Handed", "Damage Magicka Regen"] },
+            "Bee": { img: "Bee.png", price: 3, weight: 0.1, effects: ["Restore Stamina", "Ravage Stamina", "Regenerate Stamina", "Weakness to Shock"] },
+            "Beehive Husk": { img: "Beehive Husk.png", price: 5, weight: 1, effects: ["Resist Poison", "Fortify Light Armor", "Fortify Sneak", "Fortify Destruction"] },
+            "Bleeding Crown": { img: "Bleeding Crown.png", price: 10, weight: 0.3, effects: ["Weakness to Fire", "Fortify Block", "Weakness to Poison", "Resist Magic"] },
+            "Blisterwort": { img: "Blisterwort.png", price: 12, weight: 0.2, effects: ["Damage Stamina", "Restore Health", "Frenzy", "Fortify Smithing"] },
+            "Blue Butterfly Wing": { img: "Blue Butterfly Wing.png", price: 2, weight: 0.1, effects: ["Damage Stamina", "Damage Magicka Regen", "Fortify Conjuration", "Fortify Enchanting"] },
+            "Blue Dartwing": { img: "Blue Dartwing.png", price: 1, weight: 0.1, effects: ["Resist Shock", "Restore Health", "Fortify Pickpocket", "Fear"] },
+            "Blue Mountain Flower": { img: "Blue Mountain Flower.png", price: 2, weight: 0.1, effects: ["Restore Health", "Fortify Conjuration", "Fortify Health", "Damage Magicka Regen"] },
+            "Boar Tusk": { img: "Boar Tusk.png", price: 20, weight: 0.5, effects: ["Fortify Stamina", "Fortify Health", "Fortify Block", "Frenzy"] },
+            "Bone Meal": { img: "Bone Meal.png", price: 5, weight: 0.5, effects: ["Damage Stamina", "Fortify Conjuration", "Resist Fire", "Ravage Stamina"] },
+            "Briar Heart": { img: "Briar Heart.png", price: 20, weight: 0.5, effects: ["Restore Stamina", "Fortify Block", "Paralysis", "Fortify Magicka"] },
+            "Burnt Spriggan Wood": { img: "Burnt Spriggan Wood.png", price: 20, weight: 0.5, effects: ["Weakness to Fire", "Fortify Alteration", "Damage Magicka Regen", "Slow"] },
+            "Butterfly Wing": { img: "Butterfly Wing.png", price: 3, weight: 0.1, effects: ["Restore Health", "Lingering Damage Stamina", "Fortify Barter", "Damage Magicka"] },
+            "Canis Root": { img: "Canis Root.png", price: 5, weight: 0.1, effects: ["Damage Stamina", "Fortify Marksman", "Fortify One-Handed", "Paralysis"] },
+            "Charred Skeever Hide": { img: "Charred Skeever Hide.png", price: 1, weight: 0.5, effects: ["Restore Stamina", "Resist Poison", "Cure Disease", "Restore Health"] },
+            "Chaurus Eggs": { img: "Chaurus Eggs.png", price: 10, weight: 0.2, effects: ["Weakness to Poison", "Fortify Stamina", "Damage Magicka", "Invisibility"] },
+            "Chaurus Hunter Antennae": { img: "Chaurus Hunter Antennae.png", price: 2, weight: 0.1, effects: ["Damage Stamina", "Fortify Stamina", "Damage Magicka", "Fortify Enchanting"] },
+            "Chicken's Egg": { img: "Chicken's Egg.png", price: 2, weight: 0.5, effects: ["Resist Magic", "Waterbreathing", "Damage Magicka Regen", "Lingering Damage Stamina"] },
+            "Creep Cluster": { img: "Creep Cluster.png", price: 1, weight: 0.2, effects: ["Restore Magicka", "Fortify Carry Weight", "Damage Stamina Regen", "Weakness to Magic"] },
+            "Crimson Nirnroot": { img: "Crimson Nirnroot.png", price: 10, weight: 0.2, effects: ["Damage Health", "Invisibility", "Damage Stamina", "Resist Magic"] },
+            "Cyrodilic Spadetail": { img: "Cyrodilic Spadetail.png", price: 15, weight: 0.25, effects: ["Damage Stamina", "Fear", "Fortify Restoration", "Ravage Health"] },
+            "Daedra Heart": { img: "Daedra Heart.png", price: 250, weight: 0.5, effects: ["Damage Stamina Regen", "Damage Magicka", "Restore Health", "Fear"] },
+            "Deathbell": { img: "Deathbell.png", price: 4, weight: 0.1, effects: ["Damage Health", "Ravage Stamina", "Slow", "Weakness to Poison"] },
+            "Dragon's Tongue": { img: "Dragon's Tongue.png", price: 5, weight: 0.1, effects: ["Resist Fire", "Fortify Barter", "Fortify Illusion", "Fortify Two-Handed"] },
+            "Dwarven Oil": { img: "Dwarven Oil.png", price: 15, weight: 0.25, effects: ["Weakness to Magic", "Fortify Illusion", "Regenerate Magicka", "Restore Magicka"] },
+            "Ectoplasm": { img: "Ectoplasm.png", price: 25, weight: 0.1, effects: ["Restore Magicka", "Fortify Destruction", "Fortify Magicka", "Damage Health"] },
+            "Elves Ear": { img: "Elves Ear.png", price: 10, weight: 0.1, effects: ["Restore Magicka", "Weakness to Frost", "Fortify Marksman", "Resist Fire"] },
+            "Emperor Parasol Moss": { img: "Emperor Parasol Moss.png", price: 1, weight: 0.25, effects: ["Damage Health", "Fortify Magicka", "Regenerate Health", "Fortify Two-Handed"] },
+            "Eye of Sabre Cat": { img: "Eye of Sabre Cat.png", price: 2, weight: 0.1, effects: ["Restore Stamina", "Damage Magicka", "Ravage Health", "Restore Store"] },
+            "Falmer Ear": { img: "Falmer Ear.png", price: 10, weight: 0.2, effects: ["Damage Health", "Frenzy", "Resist Poison", "Fortify Lockpicking"] },
+            "Felsaad Tern Feathers": { img: "Felsaad Tern Feathers.png", price: 15, weight: 0.1, effects: ["Restore Health", "Fortify Light Armor", "Cure Disease", "Resist Magic"] },
+            "Fire Salts": { img: "Fire Salts.png", price: 50, weight: 0.25, effects: ["Weakness to Frost", "Restore Magicka", "Resist Fire", "Regenerate Magicka"] },
+            "Fly Amanita": { img: "Fly Amanita.png", price: 2, weight: 0.1, effects: ["Resist Fire", "Frenzy", "Fortify Two-Handed", "Regenerate Stamina"] },
+            "Frost Mirriam": { img: "Frost Mirriam.png", price: 1, weight: 0.1, effects: ["Resist Frost", "Fortify Sneak", "Ravage Magicka", "Damage Stamina Regen"] },
+            "Frost Salts": { img: "Frost Salts.png", price: 100, weight: 0.25, effects: ["Weakness to Fire", "Resist Frost", "Restore Magicka", "Fortify Conjuration"] },
+            "Garlic": { img: "Garlic.png", price: 1, weight: 0.25, effects: ["Resist Poison", "Fortify Stamina", "Regenerate Magicka", "Regenerate Health"] },
+            "Giant Lichen": { img: "Giant Lichen.png", price: 5, weight: 0.25, effects: ["Ravage Health", "Weakness to Poison", "Weakness to Shock", "Restore Magicka"] },
+            "Giant's Toe": { img: "Giants Toe.png", price: 20, weight: 1, effects: ["Damage Stamina", "Fortify Carry Weight", "Fortify Health", "Damage Stamina Regen"] },
+            "Gleamblossom": { img: "Gleamblossom.png", price: 2, weight: 0.1, effects: ["Resist Magic", "Fear", "Regenerate Health", "Paralysis"] },
+            "Glow Dust": { img: "Glow Dust.png", price: 20, weight: 0.5, effects: ["Damage Magicka", "Fortify Destruction", "Damage Magicka Regen", "Resist Shock"] },
+            "Glowing Mushroom": { img: "Glowing Mushroom.png", price: 5, weight: 0.2, effects: ["Resist Shock", "Fortify Destruction", "Fortify Smithing", "Fortify Health"] },
+            "Grass Pod": { img: "Grass Pod.png", price: 1, weight: 0.1, effects: ["Resist Poison", "Ravage Magicka", "Fortify Alteration", "Restore Magicka"] },
+            "Hagraven Claw": { img: "Hagraven Claw.png", price: 20, weight: 0.25, effects: ["Resist Magic", "Lingering Damage Magicka", "Fortify Enchanting", "Fortify Barter"] },
+            "Hagraven Feathers": { img: "Hagraven Feathers.png", price: 20, weight: 0.1, effects: ["Damage Magicka", "Frenzy", "Fortify Conjuration", "Weakness to Shock"] },
+            "Hanging Moss": { img: "Hanging Moss.png", price: 1, weight: 0.25, effects: ["Damage Magicka", "Damage Magicka Regen", "Fortify Health", "Fortify One-Handed"] },
+            "Hawk Beak": { img: "Hawk Beak.png", price: 15, weight: 0.25, effects: ["Restore Stamina", "Resist Frost", "Fortify Carry Weight", "Resist Shock"] },
+            "Hawk Feathers": { img: "Hawk Feathers.png", price: 15, weight: 0.1, effects: ["Cure Disease", "Fortify Light Armor", "Fortify One-Handed", "Fortify Sneak"] },
+            "Hawk's Egg": { img: "Hawk's Egg.png", price: 5, weight: 0.5, effects: ["Restore Magicka", "Damage Magicka Regen", "Waterbreathing", "Lingering Damage Stamina"] },
+            "Histcarp": { img: "Histcarp.png", price: 6, weight: 0.5, effects: ["Restore Stamina", "Fortify Magicka", "Damage Magicka Regen", "Waterbreathing"] },
+            "Honeycomb": { img: "Honeycomb.png", price: 5, weight: 1, effects: ["Restore Stamina", "Fortify Block", "Fortify Light Armor", "Ravage Stamina"] },
+            "Human Flesh": { img: "Human Flesh.png", price: 1, weight: 0.25, effects: ["Damage Health", "Paralysis", "Restore Magicka", "Fortify Sneak"] },
+            "Human Heart": { img: "Human Heart.png", price: 0, weight: 1, effects: ["Damage Health", "Damage Magicka Regen", "Damage Magicka", "Frenzy"] },
+            "Ice Wraith Teeth": { img: "Ice Wraith Teeth.png", price: 30, weight: 0.25, effects: ["Weakness to Frost", "Fortify Heavy Armor", "Invisibility", "Weakness to Fire"] },
+            "Imp Stool": { img: "Imp Stool.png", price: 0, weight: 0.3, effects: ["Damage Health", "Paralysis", "Lingering Damage Health", "Restore Health"] },
+            "Jazbay Grapes": { img: "Jazbay Grapes.png", price: 1, weight: 0.2, effects: ["Weakness to Magic", "Fortify Magicka", "Regenerate Magicka", "Ravage Health"] },
+            "Juniper Berries": { img: "Juniper Berries.png", price: 1, weight: 0.1, effects: ["Weakness to Fire", "Regenerate Health", "Fortify Marksman", "Damage Stamina Regen"] },
+            "Large Antlers": { img: "Large Antlers.png", price: 2, weight: 0.1, effects: ["Restore Stamina", "Fortify Stamina", "Slow", "Damage Stamina Regen"] },
+            "Lavender": { img: "Lavender.png", price: 1, weight: 0.1, effects: ["Resist Magic", "Fortify Stamina", "Ravage Magicka", "Fortify Conjuration"] },
+            "Luna Moth Wing": { img: "Luna Moth Wing.png", price: 5, weight: 0.1, effects: ["Damage Magicka", "Fortify Light Armor", "Regenerate Health", "invisibility"] },
+            "Moon Sugar": { img: "Moon Sugar.png", price: 50, weight: 0.25, effects: ["Weakness to Fire", "Resist Frost", "Restore Magicka", "Regenerate Magicka"] },
+            "Mora Tapinella": { img: "Mora Tapinella.png", price: 4, weight: 0.25, effects: ["Restore Magicka", "Lingering Damage Health", "Regenerate Stamina", "Fortify Illusion"] },
+            "Mudcrab Chitin": { img: "Mudcrab Chitin.png", price: 2, weight: 0.25, effects: ["Restore Stamina", "Cure Disease", "Resist Poison", "Resist Fire"] },
+            "Namira's Rot": { img: "Namira's Rot.png", price: 0, weight: 0.25, effects: ["Damage Magicka", "Fear", "Fortify Lockpicking", "Regenerate Health"] },
+            "Netch Jelly": { img: "Netch Jelly.png", price: 20, weight: 0.5, effects: ["Paralysis", "Fortify Carry Weight", "Restore Stamina", "Fear"] },
+            "Nightshade": { img: "Nightshade.png", price: 8, weight: 0.1, effects: ["Damage Health", "Damage Magicka Regen", "Lingering Damage Stamina", "Fortify Destruction"] },
+            "Nirnroot": { img: "Nirnroot.png", price: 10, weight: 0.2, effects: ["Damage Health", "Damage Stamina", "Invisibility", "Resist Magic"] },
+            "Nordic Barnacle": { img: "Nordic Barnacle.png", price: 5, weight: 0.2, effects: ["Damage Magicka", "Waterbreathing", "Regenerate Health", "Fortify Pickpocket"] },
+            "Orange Dartwing": { img: "Orange Dartwing.png", price: 1, weight: 0.1, effects: ["Restore Stamina", "Ravage Magicka", "Fortify Pickpocket", "Lingering Damage Health"] },
+            "Pearl": { img: "Pearl.png", price: 2, weight: 0.1, effects: ["Restore Stamina", "Restore Magicka", "Fortify Block", "Resist Shock"] },
+            "Pine Thrush Egg": { img: "Pine Thrush Egg.png", price: 2, weight: 0.5, effects: ["Restore Stamina", "Fortify Lockpicking", "Weakness to Poison", "Resist Shock"] },
+            "Poison Bloom": { img: "Poison Bloom.png", price: 5, weight: 0.3, effects: ["Damage Health", "Slow", "Fortify Carry Weight", "Fear"] },
+            "Powdered Mammoth Tusk": { img: "Powdered Mammoth Tusk.png", price: 2, weight: 0.1, effects: ["Restore Stamina", "Weakness to Fire", "Fortify Sneak", "Fear"] },
+            "Purple Mountain Flower": { img: "Purple Mountain Flower.png", price: 2, weight: 0.1, effects: ["Restore Stamina", "Fortify Sneak", "Lingering Damage Magicka", "Resist Frost"] },
+            "Red Mountain Flower": { img: "Red Mountain Flower.png", price: 2, weight: 0.1, effects: ["Restore Magicka", "Ravage Magicka", "Fortify Magicka", "Damage Health"] },
+            "River Betty": { img: "River Betty.png", price: 15, weight: 0.25, effects: ["Damage Health", "Fortify Alteration", "Slow", "Fortify Carry Weight"] },
+            "Rock Warbler Egg": { img: "Rock Warbler Egg.png", price: 2, weight: 0.5, effects: ["Restore Health", "Fortify One-Handed", "Damage Stamina", "Weakness to Magic"] },
+            "Sabre Cat Tooth": { img: "Sabre Cat Tooth.png", price: 2, weight: 0.1, effects: ["Restore Stamina", "Fortify Heavy Armor", "Fortify Smithing", "Weakness to Poison"] },
+            "Salmon Roe": { img: "Salmon Roe.png", price: 5, weight: 0.2, effects: ["Restore Stamina", "Waterbreathing", "Fortify Magicka", "Regenerate Magicka"] },
+            "Salt Pile": { img: "Salt Pile.png", price: 2, weight: 0.2, effects: ["Weakness to Magic", "Fortify Restoration", "Slow", "Regenerate Magicka"] },
+            "Scaly Pholiata": { img: "Scaly Pholiata.png", price: 4, weight: 0.25, effects: ["Weakness to Magic", "Fortify Illusion", "Regenerate Stamina", "Fortify Carry Weight"] },
+            "Scathecraw": { img: "Scathecraw.png", price: 1, weight: 0.1, effects: ["Ravage Health", "Ravage Stamina", "Ravage Magicka", "Lingering Damage Health"] },
+            "Silverside Perch": { img: "Silverside Perch.png", price: 15, weight: 0.25, effects: ["Restore Stamina", "Damage Stamina Regen", "Ravage Health", "Resist Frost"] },
+            "Skeever Tail": { img: "Skeever Tail.png", price: 3, weight: 0.2, effects: ["Damage Stamina Regen", "Ravage Health", "Damage Health", "Fortify Light Armor"] },
+            "Slaughterfish Egg": { img: "Slaughterfish egg.png", price: 3, weight: 0.2, effects: ["Resist Poison", "Fortify Pickpocket", "Lingering Damage Health", "Fortify Stamina"] },
+            "Slaughterfish Scales": { img: "Slaughterfish Scales.png", price: 3, weight: 0.2, effects: ["Resist Frost", "Lingering Damage Health", "Fortify Heavy Armor", "Fortify Block"] },
+            "Small Antlers": { img: "Small Antlers.png", price: 2, weight: 0.1, effects: ["Weakness to Poison", "Fortify Restoration", "Lingering Damage Stamina", "Damage Health"] },
+            "Small Pearl": { img: "Small Pearl.png", price: 2, weight: 0.1, effects: ["Restore Stamina", "Fortify One-Handed", "Fortify Restoration", "Resist Frost"] },
+            "Snowberries": { img: "Snowberries.png", price: 4, weight: 0.2, effects: ["Resist Fire", "Fortify Enchanting", "Resist Frost", "Resist Shock"] },
+            "Spawn Ash": { img: "Spawn Ash.png", price: 20, weight: 0.1, effects: ["Ravage Stamina", "Resist Fire", "Fortify Enchanting", "Ravage Magicka"] },
+            "Spider Egg": { img: "Spider Egg.png", price: 5, weight: 0.2, effects: ["Damage Stamina", "Damage Magicka Regen", "Fortify Lockpicking", "Fortify Marksman"] },
+            "Spriggan Sap": { img: "Spriggan Sap.png", price: 15, weight: 0.2, effects: ["Damage Magicka Regen", "Fortify Enchanting", "Fortify Smithing", "Fortify Alteration"] },
+            "Swamp Fungal Pod": { img: "Swamp Fungal Pod.png", price: 5, weight: 0.25, effects: ["Resist Shock", "Lingering Damage Magicka", "Paralysis", "Restore Health"] },
+            "Taproot": { img: "Taproot.png", price: 15, weight: 0.5, effects: ["Weakness to Magic", "Fortify Illusion", "Regenerate Magicka", "Restore Magicka"] },
+            "Thistle Branch": { img: "Thistle Branch.png", price: 1, weight: 0.1, effects: ["Resist Frost", "Ravage Stamina", "Resist Poison", "Fortify Heavy Armor"] },
+            "Torchbug Thorax": { img: "Torchbug Thorax.png", price: 1, weight: 0.1, effects: ["Restore Stamina", "Lingering Damage Magicka", "Weakness to Magic", "Fortify Stamina"] },
+            "Trama Root": { img: "Trama Root.png", price: 1, weight: 0.2, effects: ["Weakness to Shock", "Fortify Carry Weight", "Damage Magicka", "Slow"] },
+            "Troll Fat": { img: "Troll Fat.png", price: 15, weight: 1, effects: ["Resist Poison", "Fortify Two-Handed", "Frenzy", "Damage Health"] },
+            "Tundra Cotton": { img: "Tundra Cotton.png", price: 1, weight: 0.1, effects: ["Resist Magic", "Fortify Magicka", "Fortify Block", "Fortify Barter"] },
+            "Vampire Dust": { img: "Vampire Dust.png", price: 25, weight: 0.2, effects: ["Invisibility", "Regenerate Health", "Restore Magicka", "Cure Disease"] },
+            "Void Salts": { img: "Void Salts.png", price: 125, weight: 0.2, effects: ["Weakness to Shock", "Resist Magic", "Damage Health", "Fortify Magicka"] },
+            "Wheat": { img: "Wheat.png", price: 5, weight: 0.1, effects: ["Restore Health", "Fortify Health", "Damage Stamina Regen", "Lingering Damage Magicka"] },
+            "White Cap": { img: "White Cap.png", price: 0, weight: 0.3, effects: ["Weakness to Frost", "Fortify Heavy Armor", "Restore Magicka", "Ravage Magicka"] },
+            "Wisp Wrappings": { img: "Wisp Wrappings.png", price: 2, weight: 0.1, effects: ["Restore Stamina", "Fortify Destruction", "Fortify Carry Weight", "Resist Magic"] },
+            "Yellow Mountain Flower": { img: "Yellow Mountain Flower.png", price: 2, weight: 0.1, effects: ["Resist Poison", "Fortify Restoration", "Fortify Health", "Damage Stamina Regen"] }
+        }
+
+        // create ingredients div blocks.
+        let Container = document.createElement("div");
+        Container.id = 'ingredient_container';
+        Container.style.display = 'none';
+        document.body.appendChild(Container);
+
+        for (let key in ingredientsDict) {
+            let Try = document.createElement("div");
+            Try.id = key.toLowerCase;
+            Try.className = 'try';
+            Try.style.display = 'block';
+            Container.appendChild(Try);
+            let Content = document.createElement("div");
+            Content.className = 'content-in-try';
+            Try.appendChild(Content);
+            let backgroundImage = document.createElement("div");
+            backgroundImage.className = 'image_background';
+            Content.appendChild(backgroundImage);
+            let img1 = document.createElement("img");
+            img1.src = 'images_ingredients/' + ingredientsDict[key].img;
+            backgroundImage.appendChild(img1);
+            let div1 = document.createElement("div");
+            Content.appendChild(div1);
+            let p1 = document.createElement("p");
+            // name of each ingredient.
+            p1.className = 'Big_text';
+            p1.id = key;
+            p1.innerHTML = key;
+            div1.appendChild(p1);
+            let div2 = document.createElement("div");
+            div2.style.display = 'flex';
+            div1.appendChild(div2);
+            let img2 = document.createElement("img");
+            img2.src = 'icons/coin.png';
+            img2.className = 'image_icons';
+            div2.appendChild(img2);
+            let p2 = document.createElement("p");
+            p2.innerHTML = ingredientsDict[key].price;
+            div2.appendChild(p2);
+            let img3 = document.createElement("img");
+            img3.src = 'icons/feather.png';
+            img3.className = 'image_icons';
+            div2.appendChild(img3);
+            let p3 = document.createElement("p");
+            p3.innerHTML = ingredientsDict[key].weight;
+            div2.appendChild(p3);
+            let Box = document.createElement("div");
+            Box.className = 'box';
+            Try.appendChild(Box);
+            let Box_inside = document.createElement("div");
+            Box_inside.className = 'inside-box';
+            Box.appendChild(Box_inside);
+            //put effects in each ingredient block.
+            for (let i = 0; i < ingredientsDict[key].effects.length; i++) {
+                let p = document.createElement("p");
+                p.style.fontSize = 'small';
+                p.innerHTML = ingredientsDict[key].effects[i];
+                Box_inside.appendChild(p);
+            }
+        }
+        // lock ids for each of ingredient block.
+    </script>
+</body>
+
+</html>
